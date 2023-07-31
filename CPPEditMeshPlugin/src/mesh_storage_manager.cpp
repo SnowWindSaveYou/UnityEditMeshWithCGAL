@@ -1,14 +1,18 @@
 #include "..//include/mesh_storage_manager.h"
 
+//init
+MeshStorageManager* MeshStorageManager::g_pInstance = new (std::nothrow) MeshStorageManager();
+
+
 MeshStorageManager::MeshStorageManager()
 {
-	if (MeshStorageManager::Instance == nullptr) {
-		Instance = this;
-	}
-	else {
-		delete this;
-		return;
-	}
+	//if (MeshStorageManager::Instance == nullptr) {
+	//	Instance = this;
+	//}
+	//else {
+	//	delete this;
+	//	return;
+	//}
 
 	this->idx_count = 0;
 	this->meshStorageMap = std::map<int,MeshStorage*>();

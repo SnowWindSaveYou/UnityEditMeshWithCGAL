@@ -13,6 +13,7 @@ namespace CGALPlugin
     {
         IntPtr m_ptr = IntPtr.Zero;
         public IntPtr ptr { get => m_ptr; }
+        public int m_idx;
 
 
         public Vector3[] m_orignal_vertices;
@@ -31,6 +32,8 @@ namespace CGALPlugin
         Mesh m_refrencedMesh;
 
 
+        public Transform testTrans;
+
         // init data in cpp side
         unsafe public void Init(Mesh mesh)
         {
@@ -38,16 +41,20 @@ namespace CGALPlugin
             m_orignal_vertices = mesh.vertices;
             m_orignal_triangles = mesh.triangles;
 
-            NativeArray<Vector3>.Copy(mesh.vertices, m_vertices);
-            NativeArray<int>.Copy(mesh.triangles, m_triangles);
+            m_vertices = new NativeArray<Vector3>(m_orignal_vertices,Allocator.Persistent);
+            m_triangles = new NativeArray<int>(m_orignal_triangles, Allocator.Persistent);
 
-            IntPtr a = (IntPtr) m_vertices.GetUnsafePtr();
+            Debug.Log(string.Format("mesh info: vtx {0} tri {1}",m_vertices.Count(), m_triangles.Count()));
+
+            m_idx = CPDLL_MESHSTORAGE.addMesh((IntPtr)m_vertices.GetUnsafePtr(), m_vertices.Count()*3, (IntPtr)m_triangles.GetUnsafePtr(), m_triangles.Count());
             
         }
         public void Release()
         {
             // release from cpp
             m_ptr = IntPtr.Zero;
+            m_vertices.Dispose();
+            m_triangles.Dispose();
         }
 
         public void SetMeshData(Vector3[] vertices, int[] triangles)
@@ -73,8 +80,23 @@ namespace CGALPlugin
         // get new mesh data from cpp
         public void RefreshMesh()
         {
-            m_refrencedMesh.SetTriangles(m_work_triangles,0);
-            m_refrencedMesh.SetVertices(m_work_vertices);
+            //m_refrencedMesh.SetTriangles(m_work_triangles,0);
+            //m_refrencedMesh.SetVertices(m_work_vertices);
+            //m_refrencedMesh.SetIndices(m_triangles,MeshTopology.Triangles,0);
+            CGALMeshEditPluginDLL.updateVertexPosition();
+            m_refrencedMesh.SetVertices(m_vertices);
+        }
+
+        public void Start()
+        {
+            var meshFilter = this.GetComponent<MeshFilter>();
+            Debug.Log(meshFilter);
+
+            this.Init(meshFilter.mesh);
+        }
+        private void OnDestroy()
+        {
+            Release();
         }
     }
 }

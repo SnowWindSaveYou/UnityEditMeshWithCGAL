@@ -9,21 +9,21 @@ void MeshStorage::SetMesh(float* vertices, int vertexCount, int* indices, int in
 
 	// 添加顶点
 	std::vector<Mesh::Vertex_index> vertexIndices;
-	vertexIndices.reserve(vertexCount / 3);
-	for (int i = 0; i < vertexCount; i += 3)
+	vertexIndices.reserve(m_vertexCount / 3);
+	for (int i = 0; i < m_vertexCount; i += 3)
 	{
-		Point3 p(vertices[i], vertices[i + 1], vertices[i + 2]);
+		Point3 p(m_work_vertices[i], m_work_vertices[i + 1], m_work_vertices[i + 2]);
 		auto vid = m_mesh->add_vertex(p);
 		vertexIndices.push_back(vid);
 	}
 
 
 	// 添加三角形面片
-	for (int i = 0; i < indexCount; i += 3)
+	for (int i = 0; i < m_indexCount; i += 3)
 	{
-		Mesh::Vertex_index v1 = vertexIndices[indices[i]];
-		Mesh::Vertex_index v2 = vertexIndices[indices[i + 1]];
-		Mesh::Vertex_index v3 = vertexIndices[indices[i + 2]];
+		Mesh::Vertex_index v1 = vertexIndices[m_work_triangles[i]];
+		Mesh::Vertex_index v2 = vertexIndices[m_work_triangles[i + 1]];
+		Mesh::Vertex_index v3 = vertexIndices[m_work_triangles[i + 2]];
 		if (v1 == v2 || v2 == v3 || v1 == v3)
 			continue;
 		m_mesh->add_face(v1, v2, v3);

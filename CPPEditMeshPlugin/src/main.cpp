@@ -18,12 +18,15 @@
 #include "..//include/I_edit_tool.h"
 #include "..//include/mesh_storage_manager.h"
 
+#include "..//include/edit_tool_manager.h"
 
 
-#include "grab_brush_tool.cpp"
+
+//#include "..//include/grab_brush_tool.h"
 
 typedef Eigen::Matrix4d EMatrix4;
 typedef MeshStorageManager MSM;
+typedef EditToolManager ETM;
 
 // API must be "strict" C
 // It is STRONGLY encourage that these functions should NEVER
@@ -48,21 +51,21 @@ extern "C" {
 	__declspec(dllexport) void SetCurrentMesh(int idx);
 	__declspec(dllexport) void SetCurrentTool(int idx);
 
+
+	__declspec(dllexport) void SetRayInfo(Unity_Vector3 localPos, Unity_Vector3 localDir);
 	__declspec(dllexport) void ProcessToolBegin();
 	__declspec(dllexport) void ProcessToolEnd();
 	__declspec(dllexport) void ProcessToolUpdate();
 
+
+	__declspec(dllexport) int AddMesh(float* vertices, int vertexCount, int* indices, int indexCount);
+
 	__declspec(dllexport) void  initMesh(float* vertices, int vertexCount, int* indices, int indexCount);
-
 	__declspec(dllexport) Unity_Vector3 RayInteract(Unity_Vector3 localPos, Unity_Vector3 localDir);
-
-
 	__declspec(dllexport) void RaiseVertices(Unity_Vector3 localPos, float radius);
-
 	__declspec(dllexport) void UpdateVertexPosition();
 
 
-	__declspec(dllexport) int addMesh(float* vertices, int vertexCount, int* indices, int indexCount);
 
 
 #ifdef __cplusplus
@@ -73,60 +76,56 @@ extern "C" {
 
 
 static MeshStorage* currMeshStorage;
-
-static IEditTool* currentEditTool;
-static std::map<int,IEditTool*> editToolList;
-
-
 void InitPlugin() {
-	auto msm = new MeshStorageManager();
-
-	editToolList = std::map<int,IEditTool*>();
-	editToolList.insert(std::make_pair(0, new GrabBrushTool()));
 
 
 }
 
 void DisposePlugin() {
-	delete MSM::Instance;
+	MSM::deleteInstance();
+	ETM::deleteInstance();
 }
 
 void SetCurrentMesh(int idx) {
-	MSM::Instance->SetCurrent(idx);
+	MSM::getInstance()->SetCurrent(idx);
 }
 
 void SetCurrentTool(int idx) {
-	currentEditTool = editToolList[idx];
+	ETM::getInstance()->SetCurrentTool(idx);
 }
 
 
 void SetRayInfo(Unity_Vector3 localPos, Unity_Vector3 localDir) {
 	Point3 localPosPoint = Point3(localPos.x, localPos.y, localPos.z);
 	Vector3 localDirPoint = Vector3(localDir.x, localDir.y, localDir.z);
-	Ray ray_query(localPosPoint, localDirPoint);
-	IEditTool::s_ray = ray_query;
+	EditToolManager::getInstance()->m_ray = Ray(localPosPoint, localDirPoint);
 }
 
 void ProcessToolBegin() {
-	currentEditTool->OnEditBegin();
+	ETM::getInstance()->currentEditTool->OnEditBegin();
 }
 void ProcessToolEnd() {
-	currentEditTool->OnEditEnd();
+	ETM::getInstance()->currentEditTool->OnEditEnd();
 }
 
 // TODO put into independent thread
 void ProcessToolUpdate() {
-	currentEditTool->OnEditProcess();
+	ETM::getInstance()->currentEditTool->OnEditProcess();
 }
 
 
-int addMesh(float* vertices, int vertexCount, int* indices, int indexCount) {
+int AddMesh(float* vertices, int vertexCount, int* indices, int indexCount) {
 	auto sm = new MeshStorage();
 	sm->SetMesh(vertices, vertexCount, indices, indexCount);
 
-	int idx = MSM::Instance->AddMeshStorage(sm);
-	MSM::Instance->SetCurrent(sm);
+	int idx = MSM::getInstance()->AddMeshStorage(sm);
+	MSM::getInstance()->SetCurrent(sm);
+
+	//test
+
+	currMeshStorage = MSM::getInstance()->current;
 	return idx;
+	//return 0;
 }
 
 
@@ -148,11 +147,14 @@ Unity_Vector3 RayInteract(Unity_Vector3 localPos, Unity_Vector3 localDir) {
 	Vector3 localDirPoint= Vector3(localDir.x, localDir.y, localDir.z);
     Ray ray_query(localPosPoint, localDirPoint);
 
+	//Tree& tree = *(currMeshStorage->m_tree).get();
+	//Mesh& mesh = *(currMeshStorage->m_mesh).get();
+	Tree& tree = *(currMeshStorage->m_tree).get();
+	Mesh& mesh = *(currMeshStorage->m_mesh).get();
+
 	try {
-		Tree* tree = (currMeshStorage->m_tree).get();
-		Mesh mesh = *(currMeshStorage->m_mesh).get();
-		if (tree->do_intersect(ray_query)) {
-			Face_location ray_location = PMP::locate_with_AABB_tree(ray_query, *tree, mesh);
+		if (tree.do_intersect(ray_query)) {
+			Face_location ray_location = PMP::locate_with_AABB_tree(ray_query, tree, mesh);
 			Point3 correspondPoint = PMP::construct_point(ray_location, mesh);
 			res.x = (float) CGAL::to_double(correspondPoint.x());
 			res.y = (float) CGAL::to_double(correspondPoint.y());

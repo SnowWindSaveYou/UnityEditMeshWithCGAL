@@ -1,15 +1,17 @@
 #ifndef I_EDIT_TOOL_H
 #define I_EDIT_TOOL_H
 
+
+#include "cgal_defs.h"
 class IEditTool {
 public:
 
-	static Ray s_ray;
+	//static Ray s_ray;
 
 
-	IEditTool();
-	~IEditTool();
-	//
+	//IEditTool();
+	//~IEditTool();
+	////
 	virtual void OnSelected() {};
 	virtual void OnRemoved() {};
 

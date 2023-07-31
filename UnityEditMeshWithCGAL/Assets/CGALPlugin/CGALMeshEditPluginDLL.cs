@@ -27,6 +27,16 @@ public static class CGALMeshEditPluginDLL
     //public delegate int TestParam(IntPtr param);
 
 
+    
+    [PluginFunctionAttr("InitPlugin")]
+    public static InitPlugin initPlugin = null;
+    public delegate int InitPlugin();
+
+    [PluginFunctionAttr("DisposePlugin")]
+    public static DisposePlugin disposePlugin = null;
+    public delegate int DisposePlugin();
+
+
     [PluginFunctionAttr("initMesh")]
     public static initMesh InitMesh = null;
     //public delegate void initMesh(NativeArray< Vector3> vertices, int vertexCount, NativeArray<int> indices, int indexCount);
@@ -54,5 +64,42 @@ public static class CGALMeshEditPluginDLL
     // drag mesh
 
     #endregion
+
+}
+
+
+[PluginAttr("CPPEDITMESHPLUGIN")]
+public static class CPDLL_MESHSTORAGE
+{
+
+    [PluginFunctionAttr("AddMesh")]
+    public static AddMesh addMesh = null;
+    public delegate int AddMesh(IntPtr vertices, int vertexCount, IntPtr indices, int indexCount);
+
+    [PluginFunctionAttr("SetCurrentMesh")]
+    public static SetCurrentMesh setCurrentMesh = null;
+    public delegate void SetCurrentMesh(int idx);
+}
+
+
+[PluginAttr("CPPEDITMESHPLUGIN")]
+public static class CPDLL_EDITPROCESS
+{
+    [PluginFunctionAttr("SetRayInfo")]
+    public static SetRayInfo setRayInfo = null;
+    public delegate void SetRayInfo(Vector3 localPos, Vector3 localDir);
+
+    [PluginFunctionAttr("ProcessToolBegin")]
+    public static ProcessToolBegin processToolBegin = null;
+    public delegate void ProcessToolBegin();
+
+    [PluginFunctionAttr("ProcessToolEnd")]
+    public static ProcessToolEnd processToolEnd = null;
+    public delegate void ProcessToolEnd();
+
+    [PluginFunctionAttr("ProcessToolUpdate")]
+    public static ProcessToolUpdate processToolUpdate = null;
+    public delegate void ProcessToolUpdate();
+
 
 }

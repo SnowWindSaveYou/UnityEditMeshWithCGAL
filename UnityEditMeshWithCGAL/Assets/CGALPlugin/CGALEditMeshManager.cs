@@ -46,7 +46,7 @@ namespace CGALPlugin
 
         float brushSize = 0.3f;
 
-        public bool isEditProcessing = false;
+        private bool isEditProcessing = false;
         public bool GetEditAllowState { 
             get { 
                 return 
@@ -93,6 +93,7 @@ namespace CGALPlugin
         void handleOnEditProcess()
         {
             if (!GetEditAllowState) return;
+            
             currentEditTool.OnUpdate();
         }
 
@@ -105,12 +106,26 @@ namespace CGALPlugin
             KeyMouseActions.Instance.OnMouseLeftUp += handleOnEditEnd;
             KeyMouseActions.Instance.OnMouseLeft += handleOnEditProcess;
 
+            CGALMeshEditPluginDLL.initPlugin();
+
+            //currentTarget = 
+            currentEditTool = new GrabBrushTool();
+        }
+        private void OnDestroy()
+        {
+            //CGALMeshEditPluginDLL.disposePlugin();
         }
 
         // Update is called once per frame
         void Update()
         {
 
+            //var mousepos = Input.mousePosition;
+            //mousepos.z = 1;
+            //var worldPos = Camera.main.ScreenToWorldPoint(mousepos);
+            //var localPos = currentTarget.transform.worldToLocalMatrix.MultiplyPoint(worldPos);
+            //var localDir = currentTarget.transform.worldToLocalMatrix.MultiplyVector(Camera.main.transform.forward);
+            //CPDLL_EDITPROCESS.setRayInfo(localPos, localPos);
         }
     }
 }
