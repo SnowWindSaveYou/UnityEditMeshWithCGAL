@@ -3,8 +3,8 @@
 
 
 enum EDIT_TOOL {
-NONE = 0;
-DRAG_BRUSH = 1;
+NONE = 0,
+DRAG_BRUSH = 1,
 
 
 };

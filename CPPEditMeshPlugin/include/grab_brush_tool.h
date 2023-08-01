@@ -19,7 +19,7 @@ private:
 
 	bool isEditBegin;
 	Point3 lastPos;
-	std::vector< Vertex_index> v_select;
+	std::vector<std::pair<Vertex_index, float>> v_select;
 };
 
 

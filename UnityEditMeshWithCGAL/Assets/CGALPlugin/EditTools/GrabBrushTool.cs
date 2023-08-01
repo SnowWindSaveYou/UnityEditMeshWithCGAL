@@ -36,7 +36,7 @@ namespace CGALPlugin
             //var dir = Camera.main.transform.forward;
 
             var mousepos = Input.mousePosition;
-            mousepos.z = hitDist;
+            mousepos.z = hitDist-0.01f;
             var worldPos = Camera.main.ScreenToWorldPoint(mousepos);
             var w2l = CGALEditMeshManager.Instance.currentTarget.transform.worldToLocalMatrix;
             var localPos = w2l.MultiplyPoint(worldPos);
@@ -73,6 +73,7 @@ namespace CGALPlugin
             CGALEditMeshManager.Instance.currentTarget.testTrans.localPosition = localPos;
 
             CGALEditMeshManager.Instance.currentTarget.RefreshMesh();
+           
         }
 
         void SelectVertices(bool isSelectMode = false)

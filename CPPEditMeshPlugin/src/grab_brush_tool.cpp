@@ -3,10 +3,10 @@
 #include "..//include/mesh_storage_manager.h"
 #include "..//include/edit_tool_manager.h"
 #include "..//include/cgal_defs.h"
-
+#include <math.h>
 GrabBrushTool::GrabBrushTool()
 {
-	v_select = std::vector<Vertex_index>();
+	v_select = std::vector<std::pair<Vertex_index,float>>();
 	isEditBegin = false;
 }
 
@@ -67,7 +67,9 @@ void GrabBrushTool::OnEditBegin() {
 				float squared_dist = (hitPoint - p).squared_length();
 				if (squared_dist < squared_radius) {
 					v_stack.push(v);
-					v_select.push_back(v);
+					float w =  squared_dist / squared_radius;
+					w = 1 - w;
+					v_select.push_back(std::make_pair( v,w));
 					//meshStorage->m_deformation->insert_roi_vertex(v);
 				}
 			}
@@ -77,7 +79,7 @@ void GrabBrushTool::OnEditBegin() {
 }
 
 void GrabBrushTool::OnEditEnd() {
-
+	v_select.clear();
 }
 
 void GrabBrushTool::OnEditProcess() {
@@ -87,6 +89,7 @@ void GrabBrushTool::OnEditProcess() {
 	Point3 pos = EditToolManager::getInstance()->m_ray.source();
 	Vector3 vec = pos - lastPos;
 	for (auto v : v_select) {
-		mesh.point(v) += vec;
+		mesh.point(v.first) += vec*v.second;
 	}
+	lastPos = pos;
 }

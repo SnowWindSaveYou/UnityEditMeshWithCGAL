@@ -11,9 +11,11 @@
 
 class MeshStorage {
 public:
+	int m_uid;
 	std::shared_ptr <Mesh> m_mesh;
 	std::shared_ptr <Tree> m_tree;
 	std::shared_ptr < Deformation> m_deformation;
+	VertexNormalMap m_vnormals;
 
 
 	int* m_work_triangles;//info for unity to display

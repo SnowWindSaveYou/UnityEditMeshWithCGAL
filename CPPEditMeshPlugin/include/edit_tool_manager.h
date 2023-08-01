@@ -4,6 +4,14 @@
 #include "I_edit_tool.h"
 #include "cgal_defs.h"
 
+
+struct BrushInfo {
+	Point3 pos;
+	Vector3 dir;
+	float radius;
+	float intensity;
+};
+
 class EditToolManager
 {
 public:
@@ -24,11 +32,12 @@ public:
 	}
 
 	Ray m_ray;
+	BrushInfo m_brushInfo;
+
 	IEditTool* currentEditTool;
 	std::map<int, IEditTool*> editToolList;
 
 	void SetCurrentTool(int idx);
-
 
 
 	void ProcessToolBegin();

@@ -5,6 +5,16 @@
 #include <vector>
 #include <map>
 #include "mesh_storage.h"
+#include "cgal_defs.h"
+#include "unity_includes.h"
+
+
+struct HitInfo {
+	Unity_Vector3 pos;
+	Unity_Vector3 normal;
+	int meshIdx;
+};
+
 
 class MeshStorageManager
 {
@@ -27,7 +37,7 @@ public:
 
 	MeshStorage *current = nullptr;
 
-	std::map<int,MeshStorage*> meshStorageMap;
+	std::map<int, std::shared_ptr< MeshStorage>>meshStorageMap;
 
 	void SetCurrent(int idx);
 	void SetCurrent(MeshStorage* pMeshStorage);
@@ -35,6 +45,11 @@ public:
 	int GetIndex(MeshStorage* pMeshStorage);
 
 	int AddMeshStorage(MeshStorage* pMeshStorage);
+
+
+	HitInfo RaycastCurrent(Ray ray);
+
+	HitInfo RaycastAny(Ray ray);
 
 private:
 	static MeshStorageManager* g_pInstance;

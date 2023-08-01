@@ -42,4 +42,9 @@ typedef CGAL::AABB_tree<AABB_face_graph_traits> Tree;
 typedef PMP::Barycentric_coordinates<FT> Barycentric_coordinates;
 typedef PMP::Face_location<Mesh, FT> Face_location;
 
+
+typedef boost::property_map<Mesh, CGAL::vertex_point_t>::type  VPMap;
+typedef Mesh::template Property_map<Vertex_index, Vector3> VNMap;
+
+
 #endif

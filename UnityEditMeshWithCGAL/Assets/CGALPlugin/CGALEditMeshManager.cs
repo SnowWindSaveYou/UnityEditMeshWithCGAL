@@ -108,24 +108,17 @@ namespace CGALPlugin
 
             CGALMeshEditPluginDLL.initPlugin();
 
-            //currentTarget = 
             currentEditTool = new GrabBrushTool();
         }
         private void OnDestroy()
         {
-            //CGALMeshEditPluginDLL.disposePlugin();
+            CGALMeshEditPluginDLL.disposePlugin();
         }
 
         // Update is called once per frame
         void Update()
         {
 
-            //var mousepos = Input.mousePosition;
-            //mousepos.z = 1;
-            //var worldPos = Camera.main.ScreenToWorldPoint(mousepos);
-            //var localPos = currentTarget.transform.worldToLocalMatrix.MultiplyPoint(worldPos);
-            //var localDir = currentTarget.transform.worldToLocalMatrix.MultiplyVector(Camera.main.transform.forward);
-            //CPDLL_EDITPROCESS.setRayInfo(localPos, localPos);
         }
     }
 }

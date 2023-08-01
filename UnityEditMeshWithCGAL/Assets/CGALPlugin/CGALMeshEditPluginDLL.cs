@@ -55,15 +55,6 @@ public static class CGALMeshEditPluginDLL
     public static UpdateVertexPosition updateVertexPosition = null;
     public delegate void UpdateVertexPosition();
 
-    #region[ surface mesh]
-
-    // init mesh
-
-    // update mesh
-
-    // drag mesh
-
-    #endregion
 
 }
 
@@ -71,6 +62,13 @@ public static class CGALMeshEditPluginDLL
 [PluginAttr("CPPEDITMESHPLUGIN")]
 public static class CPDLL_MESHSTORAGE
 {
+    public class CPDLL_HitInfo
+    {
+        Vector3 position;
+        Vector3 normal;
+        int hitIdx;
+    }
+
 
     [PluginFunctionAttr("AddMesh")]
     public static AddMesh addMesh = null;
@@ -79,6 +77,10 @@ public static class CPDLL_MESHSTORAGE
     [PluginFunctionAttr("SetCurrentMesh")]
     public static SetCurrentMesh setCurrentMesh = null;
     public delegate void SetCurrentMesh(int idx);
+
+    //raycast
+
+    
 }
 
 

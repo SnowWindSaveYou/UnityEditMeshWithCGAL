@@ -1,6 +1,10 @@
 #include "..//include/mesh_storage.h"
 
-void MeshStorage::SetMesh(float* vertices, int vertexCount, int* indices, int indexCount) {
+void MeshStorage::SetMesh(
+	float* vertices, int vertexCount, 
+	int* indices, int indexCount
+
+) {
 	m_work_triangles = indices;
 	m_indexCount = indexCount;
 	m_work_vertices = vertices;
@@ -28,6 +32,12 @@ void MeshStorage::SetMesh(float* vertices, int vertexCount, int* indices, int in
 			continue;
 		m_mesh->add_face(v1, v2, v3);
 	}
+
+	vnormals = m_mesh->template add_property_map<Vertex_index, Vector3>("v:normals", CGAL::NULL_VECTOR).first;
+
+	//auto a = vnormals[vertexIndices[0]];
+	PMP::compute_vertex_normals(m_mesh, vnormals);
+	
 
 	PMP::build_AABB_tree(*m_mesh, *m_tree);
 }

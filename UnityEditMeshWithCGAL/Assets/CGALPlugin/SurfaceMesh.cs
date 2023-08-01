@@ -85,6 +85,7 @@ namespace CGALPlugin
             //m_refrencedMesh.SetIndices(m_triangles,MeshTopology.Triangles,0);
             CGALMeshEditPluginDLL.updateVertexPosition();
             m_refrencedMesh.SetVertices(m_vertices);
+            m_refrencedMesh.RecalculateNormals();
         }
 
         public void Start()
