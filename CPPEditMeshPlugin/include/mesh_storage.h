@@ -9,6 +9,12 @@
 #include <unordered_set>
 #include "cgal_defs.h"
 
+
+
+
+
+
+
 class MeshStorage {
 public:
 	int m_uid;
@@ -16,7 +22,7 @@ public:
 	std::shared_ptr <Tree> m_tree;
 	std::shared_ptr < Deformation> m_deformation;
 	VertexNormalMap m_vnormals;
-
+	std::map<vertex_descriptor, int> m_vmap;
 
 	int* m_work_triangles;//info for unity to display
 	float* m_work_vertices;
@@ -25,11 +31,7 @@ public:
 
 	bool notifiedMeshUpdated = false;
 
-	MeshStorage() {
-		m_mesh = std::shared_ptr <Mesh >(new Mesh());
-		m_tree = std::shared_ptr <Tree >(new Tree());
-		//m_deformation = new Deformation(m_mesh);
-	}
+	MeshStorage();
 	~MeshStorage() {
 
 	}
@@ -41,7 +43,14 @@ public:
 
 	void UpdateWorkMeshVertices();
 
-	//void UpdateWorkMesh();
+	void UpdateWorkMesh();
+
+	void MergeCloseVertices(int& vertexCount, int& indexCount);//the result counts are lower than original
+
+	void GetMeshCountsInfo(int& vertexCount, int& indexCount);
+
+
+	
 };
 
 

@@ -81,9 +81,9 @@ void InitPlugin() {
 
 }
 
-void DisposePlugin() {
-	MSM::deleteInstance();
-	ETM::deleteInstance();
+void DisposePlugin() {//TODO
+	//MSM::deleteInstance();
+	//ETM::deleteInstance();
 }
 
 void SetCurrentMesh(int idx) {

@@ -16,6 +16,7 @@ struct HitInfo {
 };
 
 
+
 class MeshStorageManager
 {
 public:
@@ -58,3 +59,20 @@ private:
 
 
 #endif // !MESH_STORAGE_MANAGER_H
+
+
+
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+	__declspec(dllexport) void MergeCloseVertices(int& vertexCount, int& indexCount);
+
+	__declspec(dllexport) void GetMeshCountsInfo(int& vertexCount, int& indexCount);
+
+	__declspec(dllexport) void UpdateWorkMesh();
+
+#ifdef __cplusplus
+}
+#endif

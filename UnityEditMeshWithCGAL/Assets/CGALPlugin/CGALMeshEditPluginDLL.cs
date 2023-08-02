@@ -78,9 +78,26 @@ public static class CPDLL_MESHSTORAGE
     public static SetCurrentMesh setCurrentMesh = null;
     public delegate void SetCurrentMesh(int idx);
 
+
+    [PluginFunctionAttr("MergeCloseVertices")]
+    public static MergeCloseVertices mergeCloseVertices = null;
+    public delegate void MergeCloseVertices(ref int vertexCount, ref int indexCount);
+
+
+    [PluginFunctionAttr("GetMeshCountsInfo")]
+    public static GetMeshCountsInfo getMeshCountsInfo = null;
+    public delegate void GetMeshCountsInfo(ref int vertexCount, ref int indexCount);
+
+
+    [PluginFunctionAttr("UpdateWorkMesh")]
+    public static UpdateWorkMesh updateWorkMesh = null;
+    public delegate void UpdateWorkMesh();
+
+
+
     //raycast
 
-    
+
 }
 
 

@@ -72,7 +72,7 @@ namespace CGALPlugin
 
             CGALEditMeshManager.Instance.currentTarget.testTrans.localPosition = localPos;
 
-            CGALEditMeshManager.Instance.currentTarget.RefreshMesh();
+            CGALEditMeshManager.Instance.currentTarget.RefreshMeshVertices();
            
         }
 

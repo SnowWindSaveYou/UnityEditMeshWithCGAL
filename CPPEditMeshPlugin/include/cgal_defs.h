@@ -6,13 +6,16 @@
 #include <CGAL/Surface_mesh_deformation.h>
 #include <CGAL/Surface_mesh.h>
 #include <CGAL/Polygon_mesh_processing/compute_normal.h>
+//#include <CGAL/Polygon_mesh_processing/IO/polygon_mesh_io.h>
+
 #include <CGAL/AABB_tree.h>
 #include <CGAL/AABB_traits.h>
 
 #include <CGAL/Polygon_mesh_processing/locate.h>
 #include <CGAL/Polygon_mesh_processing/triangulate_faces.h>
 #include <CGAL/Polygon_mesh_processing/connected_components.h>
-
+#include <CGAL/Polygon_mesh_processing/merge_border_vertices.h>    
+#include <CGAL/Polygon_mesh_processing/repair.h>
 
 namespace PMP = CGAL::Polygon_mesh_processing;
 
@@ -31,6 +34,8 @@ typedef Mesh::Vertex_index Vertex_index;
 typedef Mesh::Face_index Face_index;
 typedef Mesh::Halfedge_index Halfedge_index;
 typedef Mesh::Edge_index Edge_index;
+typedef boost::graph_traits<Mesh>::vertex_descriptor      vertex_descriptor;
+
 
 typedef CGAL::Surface_mesh_deformation<Mesh> Deformation;
 
@@ -44,7 +49,7 @@ typedef PMP::Face_location<Mesh, FT> Face_location;
 
 
 typedef boost::property_map<Mesh, CGAL::vertex_point_t>::type  VPMap;
-typedef Mesh::template Property_map<Vertex_index, Vector3> VNMap;
+typedef Mesh::template Property_map<vertex_descriptor, Vector3> VertexNormalMap;
 
 
 #endif

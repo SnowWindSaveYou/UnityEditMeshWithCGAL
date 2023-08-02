@@ -112,7 +112,7 @@ namespace CGALPlugin
         }
         private void OnDestroy()
         {
-            CGALMeshEditPluginDLL.disposePlugin();
+            //CGALMeshEditPluginDLL.disposePlugin();
         }
 
         // Update is called once per frame

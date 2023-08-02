@@ -88,3 +88,23 @@ HitInfo MeshStorageManager::RaycastAny(Ray ray_query) {
 
 	return res;
 }
+
+
+#pragma region [export]
+
+
+void MergeCloseVertices(int& vertexCount, int& indexCount) {
+	MeshStorageManager::getInstance()->current->MergeCloseVertices(vertexCount, indexCount);
+
+}
+void GetMeshCountsInfo(int& vertexCount, int& indexCount) {
+	MeshStorageManager::getInstance()->current->GetMeshCountsInfo(vertexCount, indexCount);
+}
+
+void UpdateWorkMesh() {
+	MeshStorageManager::getInstance()->current->UpdateWorkMesh();
+
+}
+
+
+#pragma endregion

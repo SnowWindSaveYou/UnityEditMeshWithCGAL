@@ -29,6 +29,7 @@ namespace CGALPlugin
         NativeArray<Vector3> m_vertices;
         NativeArray<int> m_triangles;
 
+
         Mesh m_refrencedMesh;
 
 
@@ -47,7 +48,9 @@ namespace CGALPlugin
             Debug.Log(string.Format("mesh info: vtx {0} tri {1}",m_vertices.Count(), m_triangles.Count()));
 
             m_idx = CPDLL_MESHSTORAGE.addMesh((IntPtr)m_vertices.GetUnsafePtr(), m_vertices.Count()*3, (IntPtr)m_triangles.GetUnsafePtr(), m_triangles.Count());
-            
+
+            MergeSeem();
+
         }
         public void Release()
         {
@@ -78,7 +81,7 @@ namespace CGALPlugin
         }
 
         // get new mesh data from cpp
-        public void RefreshMesh()
+        public void RefreshMeshVertices()
         {
             //m_refrencedMesh.SetTriangles(m_work_triangles,0);
             //m_refrencedMesh.SetVertices(m_work_vertices);
@@ -86,6 +89,28 @@ namespace CGALPlugin
             CGALMeshEditPluginDLL.updateVertexPosition();
             m_refrencedMesh.SetVertices(m_vertices);
             m_refrencedMesh.RecalculateNormals();
+        }
+
+        public void MergeSeem()
+        {
+            int verticesCount = 0, indexCount = 0;
+            CPDLL_MESHSTORAGE.mergeCloseVertices(ref verticesCount, ref indexCount);
+            Debug.Log(string.Format("v:{0} i:{1}", verticesCount, indexCount));
+            CPDLL_MESHSTORAGE.updateWorkMesh();
+
+            for(int i=0;i< indexCount; i++)
+            {
+                if (m_triangles[i]> verticesCount)
+                {
+                    Debug.Log(m_triangles[i]+","+ m_vertices[m_triangles[i]]);
+                }
+            }
+
+            m_refrencedMesh.Clear();
+            m_refrencedMesh.SetVertices(m_vertices,0, verticesCount);
+            m_refrencedMesh.SetIndices(m_triangles,0, indexCount, MeshTopology.Triangles,0);//
+            m_refrencedMesh.RecalculateNormals();
+
         }
 
         public void Start()
