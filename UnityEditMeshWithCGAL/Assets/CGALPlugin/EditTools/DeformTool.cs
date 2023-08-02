@@ -6,13 +6,13 @@ using UnityEngine;
 
 namespace CGALPlugin
 {
-    public class GrabBrushTool : IEditTool
+    public class DeformTool : IEditTool
     {
 
 
         float hitDist;
 
-        ~GrabBrushTool()
+        ~DeformTool()
         {
 
         }

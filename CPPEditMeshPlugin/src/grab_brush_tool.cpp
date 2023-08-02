@@ -40,6 +40,7 @@ void GrabBrushTool::OnEditBegin() {
 		isEditBegin = false;
 		return;
 	}
+	//hitPoint = ray.source();
 
 	float radius = 0.3f;
 	float squared_radius = radius * radius;

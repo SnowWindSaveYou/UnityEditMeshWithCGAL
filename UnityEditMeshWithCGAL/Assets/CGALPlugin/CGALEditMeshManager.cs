@@ -14,7 +14,8 @@ namespace CGALPlugin
         Draw,
         Rubber,
         Scaler,
-        Smooth
+        Smooth,
+        Deform
     }
 
 
@@ -42,7 +43,12 @@ namespace CGALPlugin
 
 
         public SurfaceMesh currentTarget;
+
+
+
         public IEditTool currentEditTool;
+        public EditToolType currentEditToolType = EditToolType.None;
+        public Dictionary<EditToolType, IEditTool> editTools;
 
         float brushSize = 0.3f;
 
@@ -56,6 +62,21 @@ namespace CGALPlugin
             } 
         }
 
+
+        public void SetEditToolType(EditToolType editToolType)
+        {
+            currentEditToolType = editToolType;
+
+            if (editTools.ContainsKey(editToolType)){ 
+
+                currentEditTool = editTools[editToolType];
+                //todo
+            }
+            else
+            {
+                currentEditTool = null;
+            }
+        }
 
         #region [Interaction help]
 
@@ -73,6 +94,9 @@ namespace CGALPlugin
             return pos;
         }
         #endregion [Interaction help]
+
+
+
 
         #region [Edit Actions]
 
@@ -108,7 +132,13 @@ namespace CGALPlugin
 
             CGALMeshEditPluginDLL.initPlugin();
 
-            currentEditTool = new GrabBrushTool();
+
+            editTools = new Dictionary<EditToolType, IEditTool>();
+            editTools.Add(EditToolType.Drag, new GrabBrushTool());
+            editTools.Add(EditToolType.Deform, new DeformTool());
+
+            //test
+            SetEditToolType(EditToolType.Drag);
         }
         private void OnDestroy()
         {
