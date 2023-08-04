@@ -2,6 +2,9 @@
 
 #include "..//include/grab_brush_tool.h"
 
+#include "..//include/deform_brush_tool.h"
+
+
 
 //init
 EditToolManager* EditToolManager::g_pInstance = new (std::nothrow) EditToolManager();
@@ -10,7 +13,8 @@ EditToolManager* EditToolManager::g_pInstance = new (std::nothrow) EditToolManag
 EditToolManager::EditToolManager()
 {
 	this->editToolList = std::map<int, IEditTool*>();
-	this->editToolList.insert(std::make_pair(0, new GrabBrushTool()));
+	this->editToolList.insert(std::make_pair(1, new GrabBrushTool()));
+	this->editToolList.insert(std::make_pair(2, new DeformBrushTool()));
 	this->SetCurrentTool(0);
 }
 
@@ -19,7 +23,12 @@ EditToolManager::~EditToolManager()
 }
 
 void EditToolManager::SetCurrentTool(int idx) {
-	currentEditTool = editToolList.at(idx);
+	if (idx == 0) {
+
+	}
+	else {
+		currentEditTool = editToolList.at(idx);
+	}
 }
 
 

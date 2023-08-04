@@ -71,7 +71,7 @@ extern "C" {
 
 	__declspec(dllexport) void GetMeshCountsInfo(int& vertexCount, int& indexCount);
 
-	__declspec(dllexport) void UpdateWorkMesh();
+	__declspec(dllexport) void UpdateWorkMesh(float* vertices, int* indices);
 
 #ifdef __cplusplus
 }

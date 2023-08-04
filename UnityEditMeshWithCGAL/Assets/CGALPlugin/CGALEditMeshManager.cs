@@ -8,14 +8,14 @@ namespace CGALPlugin
     public enum EditToolType
     {
         None = 0,
-        Drag,
+        Drag = 1,
+        Deform = 2,
         Raise,
         Lower,
         Draw,
         Rubber,
         Scaler,
         Smooth,
-        Deform
     }
 
 
@@ -47,6 +47,7 @@ namespace CGALPlugin
 
 
         public IEditTool currentEditTool;
+        [HideInInspector]
         public EditToolType currentEditToolType = EditToolType.None;
         public Dictionary<EditToolType, IEditTool> editTools;
 
@@ -65,11 +66,17 @@ namespace CGALPlugin
 
         public void SetEditToolType(EditToolType editToolType)
         {
+            if (editToolType == currentEditToolType) return;
+            currentEditTool?.OnWithdraw();
+
             currentEditToolType = editToolType;
 
             if (editTools.ContainsKey(editToolType)){ 
 
                 currentEditTool = editTools[editToolType];
+                CPDLL_EDITPROCESS.setCurrentTool((int)editToolType);
+
+                currentEditTool.OnInit();
                 //todo
             }
             else

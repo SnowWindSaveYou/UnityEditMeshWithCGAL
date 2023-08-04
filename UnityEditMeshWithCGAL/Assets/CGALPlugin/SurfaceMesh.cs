@@ -91,12 +91,12 @@ namespace CGALPlugin
             m_refrencedMesh.RecalculateNormals();
         }
 
-        public void MergeSeem()
+        unsafe public void MergeSeem()
         {
             int verticesCount = 0, indexCount = 0;
             CPDLL_MESHSTORAGE.mergeCloseVertices(ref verticesCount, ref indexCount);
             Debug.Log(string.Format("v:{0} i:{1}", verticesCount, indexCount));
-            CPDLL_MESHSTORAGE.updateWorkMesh();
+            CPDLL_MESHSTORAGE.updateWorkMesh((IntPtr)m_vertices.GetUnsafePtr(), (IntPtr)m_triangles.GetUnsafePtr() );
 
             for(int i=0;i< indexCount; i++)
             {

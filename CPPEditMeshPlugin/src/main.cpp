@@ -57,6 +57,9 @@ extern "C" {
 	__declspec(dllexport) void ProcessToolEnd();
 	__declspec(dllexport) void ProcessToolUpdate();
 
+	__declspec(dllexport) void OnToolSelected();
+	__declspec(dllexport) void OnToolWithdraw();
+
 
 	__declspec(dllexport) int AddMesh(float* vertices, int vertexCount, int* indices, int indexCount);
 
@@ -107,11 +110,18 @@ void ProcessToolBegin() {
 void ProcessToolEnd() {
 	ETM::getInstance()->currentEditTool->OnEditEnd();
 }
-
 // TODO put into independent thread
 void ProcessToolUpdate() {
 	ETM::getInstance()->currentEditTool->OnEditProcess();
 }
+void OnToolSelected() {
+	ETM::getInstance()->currentEditTool->OnSelected();
+}
+void OnToolWithdraw() {
+	ETM::getInstance()->currentEditTool->OnRemoved();
+}
+
+
 
 
 int AddMesh(float* vertices, int vertexCount, int* indices, int indexCount) {
@@ -147,8 +157,6 @@ Unity_Vector3 RayInteract(Unity_Vector3 localPos, Unity_Vector3 localDir) {
 	Vector3 localDirPoint= Vector3(localDir.x, localDir.y, localDir.z);
     Ray ray_query(localPosPoint, localDirPoint);
 
-	//Tree& tree = *(currMeshStorage->m_tree).get();
-	//Mesh& mesh = *(currMeshStorage->m_mesh).get();
 	Tree& tree = *(currMeshStorage->m_tree).get();
 	Mesh& mesh = *(currMeshStorage->m_mesh).get();
 

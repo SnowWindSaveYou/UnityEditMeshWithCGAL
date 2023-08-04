@@ -20,7 +20,8 @@ public:
 	int m_uid;
 	std::shared_ptr <Mesh> m_mesh;
 	std::shared_ptr <Tree> m_tree;
-	std::shared_ptr < Deformation> m_deformation;
+
+
 	VertexNormalMap m_vnormals;
 	std::map<vertex_descriptor, int> m_vmap;
 
@@ -43,13 +44,13 @@ public:
 
 	void UpdateWorkMeshVertices();
 
-	void UpdateWorkMesh();
+	void UpdateWorkMesh(float* vertices, int* indices);// need get counts and make new buffers first
 
 	void MergeCloseVertices(int& vertexCount, int& indexCount);//the result counts are lower than original
 
 	void GetMeshCountsInfo(int& vertexCount, int& indexCount);
 
-
+	void UpdateTree();
 	
 };
 

@@ -20,12 +20,12 @@ namespace CGALPlugin
 
         public void OnInit()
         {
-
+            CPDLL_EDITPROCESS.onToolSelected();
         }
 
-        public void OnDispose()
+        public void OnWithdraw()
         {
-
+            CPDLL_EDITPROCESS.onToolWithdraw();
         }
 
         public void OnStart()

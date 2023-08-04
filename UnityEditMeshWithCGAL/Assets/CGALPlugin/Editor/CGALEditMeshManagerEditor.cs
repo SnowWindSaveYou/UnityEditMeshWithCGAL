@@ -11,6 +11,8 @@ public class CGALEditMeshManagerEditor : Editor
     private EditToolType CurrentToolType;
     private float brushSize = 0.3f;
 
+
+   
     private void OnEnable()
     {
         that = (CGALEditMeshManager)target;
@@ -20,7 +22,7 @@ public class CGALEditMeshManagerEditor : Editor
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
-        CurrentToolType = (EditToolType)EditorGUILayout.EnumPopup("Tool:", CurrentToolType);
+        CurrentToolType = (EditToolType)EditorGUILayout.EnumPopup("Tool:", that.currentEditToolType);
         if (CurrentToolType != that.currentEditToolType)
         {
             that.SetEditToolType(CurrentToolType);

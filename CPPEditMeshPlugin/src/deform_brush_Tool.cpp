@@ -1,36 +1,38 @@
 
-#include "..//include/grab_brush_tool.h"
+#include "..//include/deform_brush_tool.h"
 #include "..//include/mesh_storage_manager.h"
 #include "..//include/edit_tool_manager.h"
 #include "..//include/cgal_defs.h"
 #include <math.h>
-GrabBrushTool::GrabBrushTool()
+
+
+
+DeformBrushTool::DeformBrushTool()
 {
-	v_select = std::vector<std::pair<Vertex_index,float>>();
+	v_select_roi = std::vector<Vertex_index>();
+	v_select_control = std::vector<Vertex_index>();
 	isEditBegin = false;
 }
 
-GrabBrushTool::~GrabBrushTool()
+DeformBrushTool::~DeformBrushTool()
 {
+}
 
+void DeformBrushTool::OnSelected() {
+	MeshStorage* ms = MeshStorageManager::getInstance()->current;
+	//ms->m_deformation->reset();
+	m_deformation.reset(new SM_Deformation(*ms->m_mesh));
+
+}
+void DeformBrushTool::OnRemoved() {
 
 }
 
-void GrabBrushTool::OnSelected() {
-	//MeshStorage* ms = MeshStorageManager::getInstance()->current;
-	//EditToolManager* etm = EditToolManager::getInstance();
-
-
-}
-void GrabBrushTool::OnRemoved() {
-
-}
-
-void GrabBrushTool::OnEditBegin() {
+void DeformBrushTool::OnEditBegin() {
 	MeshStorage* ms = MeshStorageManager::getInstance()->current;
 	EditToolManager* etm = EditToolManager::getInstance();
-	Mesh &mesh = *ms->m_mesh;
-	Tree &tree = *ms->m_tree;
+	Mesh& mesh = *ms->m_mesh;
+	Tree& tree = *ms->m_tree;
 
 
 	Point3 hitPoint;
@@ -47,7 +49,7 @@ void GrabBrushTool::OnEditBegin() {
 	}
 	//hitPoint = ray.source();
 
-	float radius = 0.3f;
+	float radius = 0.5f;
 	float squared_radius = radius * radius;
 
 	auto closestPoint = ms->m_tree->closest_point_and_primitive(hitPoint);
@@ -60,6 +62,12 @@ void GrabBrushTool::OnEditBegin() {
 	std::unordered_set<Vertex_index> visited_set = std::unordered_set<Vertex_index>();
 	v_stack.push(v_idex);
 
+	// control
+	m_deformation->insert_control_vertex(v_idex);
+	v_current_control = v_idex;
+	v_select_roi.push_back(v_idex);
+
+	// roi
 	while (!v_stack.empty()) {
 		Vertex_index src_v = v_stack.top();
 		v_stack.pop();
@@ -73,30 +81,36 @@ void GrabBrushTool::OnEditBegin() {
 				float squared_dist = (hitPoint - p).squared_length();
 				if (squared_dist < squared_radius) {
 					v_stack.push(v);
-					float w =  squared_dist / squared_radius;
-					w = 1 - w;
-					v_select.push_back(std::make_pair( v,w));
-					//meshStorage->m_deformation->insert_roi_vertex(v);
+					v_select_roi.push_back(v);
 				}
 			}
 		} while (vbegin != vend);
 	}
 	lastPos = hitPoint;
+
+	// 
+	//ms->m_deformation->insert_control_vertices(v_select.begin(),v_select.end());
+	m_deformation->insert_roi_vertices(v_select_roi.begin(), v_select_roi.end());
+	m_deformation->preprocess();
+
 }
 
-void GrabBrushTool::OnEditEnd() {
-	v_select.clear();
+void DeformBrushTool::OnEditEnd() {
+	v_select_roi.clear();
 	MeshStorageManager::getInstance()->current->UpdateTree();
 }
 
-void GrabBrushTool::OnEditProcess() {
+void DeformBrushTool::OnEditProcess() {
 	if (!isEditBegin)return;
 	auto ms = MeshStorageManager::getInstance()->current;
 	Mesh& mesh = *ms->m_mesh;
 	Point3 pos = EditToolManager::getInstance()->m_ray.source();
 	Vector3 vec = pos - lastPos;
-	for (auto v : v_select) {
-		mesh.point(v.first) += vec*v.second;
-	}
+	//Vector3 vec = Vector3(0.1, 0, 0);
+	auto p = mesh.point(v_current_control) + vec;
+	m_deformation->set_target_position(v_current_control, p);
+	m_deformation->deform(10,5);
+
+
 	lastPos = pos;
 }

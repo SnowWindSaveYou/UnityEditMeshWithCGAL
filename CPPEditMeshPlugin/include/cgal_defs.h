@@ -37,7 +37,7 @@ typedef Mesh::Edge_index Edge_index;
 typedef boost::graph_traits<Mesh>::vertex_descriptor      vertex_descriptor;
 
 
-typedef CGAL::Surface_mesh_deformation<Mesh> Deformation;
+typedef CGAL::Surface_mesh_deformation<Mesh, CGAL::Default, CGAL::Default,CGAL::SRE_ARAP> SM_Deformation;
 
 
 typedef CGAL::AABB_face_graph_triangle_primitive<Mesh> MeshPrimitive;

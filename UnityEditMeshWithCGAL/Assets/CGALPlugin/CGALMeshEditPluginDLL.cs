@@ -91,7 +91,7 @@ public static class CPDLL_MESHSTORAGE
 
     [PluginFunctionAttr("UpdateWorkMesh")]
     public static UpdateWorkMesh updateWorkMesh = null;
-    public delegate void UpdateWorkMesh();
+    public delegate void UpdateWorkMesh(IntPtr vertices,  IntPtr indices);
 
 
 
@@ -120,5 +120,16 @@ public static class CPDLL_EDITPROCESS
     public static ProcessToolUpdate processToolUpdate = null;
     public delegate void ProcessToolUpdate();
 
+    [PluginFunctionAttr("OnToolSelected")]
+    public static OnToolSelected onToolSelected = null;
+    public delegate void OnToolSelected();
 
+    [PluginFunctionAttr("OnToolWithdraw")]
+    public static OnToolWithdraw onToolWithdraw = null;
+    public delegate void OnToolWithdraw();
+
+
+    [PluginFunctionAttr("SetCurrentTool")]
+    public static SetCurrentTool setCurrentTool = null;
+    public delegate void SetCurrentTool(int idx);
 }

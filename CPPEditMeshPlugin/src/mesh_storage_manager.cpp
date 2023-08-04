@@ -101,8 +101,8 @@ void GetMeshCountsInfo(int& vertexCount, int& indexCount) {
 	MeshStorageManager::getInstance()->current->GetMeshCountsInfo(vertexCount, indexCount);
 }
 
-void UpdateWorkMesh() {
-	MeshStorageManager::getInstance()->current->UpdateWorkMesh();
+void UpdateWorkMesh(float* vertices, int* indices) {
+	MeshStorageManager::getInstance()->current->UpdateWorkMesh(vertices, indices);
 
 }
 
