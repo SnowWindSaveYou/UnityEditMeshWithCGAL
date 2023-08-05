@@ -1,7 +1,7 @@
 #ifndef I_EDIT_TOOL_H
 #define I_EDIT_TOOL_H
 
-
+#include "keys_enums.h"
 #include "cgal_defs.h"
 class IEditTool {
 public:

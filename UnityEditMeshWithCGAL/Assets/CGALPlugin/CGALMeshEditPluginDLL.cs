@@ -132,4 +132,8 @@ public static class CPDLL_EDITPROCESS
     [PluginFunctionAttr("SetCurrentTool")]
     public static SetCurrentTool setCurrentTool = null;
     public delegate void SetCurrentTool(int idx);
+
+    [PluginFunctionAttr("SetSelectionBuffer")]
+    public static SetSelectionBuffer setSelectionBuffer = null;
+    public delegate void SetSelectionBuffer(IntPtr selectedList);
 }

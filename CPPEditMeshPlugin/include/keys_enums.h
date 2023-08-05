@@ -1,0 +1,13 @@
+#ifndef KEYS_ENUMS_H
+#define KEYS_ENUMS_H
+
+
+enum INTERACTION_KEYS
+{
+	KEY_CONTROL = 1,
+	KEY_SHIFT = 2,
+	DISPLAY_SELECTION = 3,
+
+};
+
+#endif // !KEYS_ENUMS_H

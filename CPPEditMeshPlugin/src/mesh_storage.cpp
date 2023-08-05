@@ -53,7 +53,7 @@ void MeshStorage::SetMesh(
 
 void MeshStorage::UpdateWorkMeshVertices() { // not update tropo
 	int i = 0;
-	for (auto v : m_mesh->vertices()) {
+	for (auto &v : m_mesh->vertices()) {
 		auto p = m_mesh->point(v);
 		int pid = i*3;
 		m_work_vertices[pid] = (float)CGAL::to_double(p.x());
@@ -69,7 +69,7 @@ void MeshStorage::UpdateWorkMesh(float* vertices, int* indices) { // not update 
 
 	int i = 0;
 	m_vmap.clear();
-	for (auto v : m_mesh->vertices()) {
+	for (auto &v : m_mesh->vertices()) {
 		auto p = m_mesh->point(v);
 		int pid = i * 3;
 		m_work_vertices[pid] = (float)CGAL::to_double(p.x());
@@ -81,7 +81,7 @@ void MeshStorage::UpdateWorkMesh(float* vertices, int* indices) { // not update 
 	}
 
 	i = 0;
-	for (auto f : m_mesh->faces()) {
+	for (auto &f : m_mesh->faces()) {
 		auto iter = m_mesh->vertices_around_face(m_mesh->halfedge(f)).begin();
 		auto v1 = *iter++;
 		auto v2 = *iter++;
@@ -116,3 +116,4 @@ void MeshStorage::GetMeshCountsInfo(int& vertexCount, int& indexCount) {
 void MeshStorage::UpdateTree() {
 	PMP::build_AABB_tree(*m_mesh, *m_tree);
 }
+

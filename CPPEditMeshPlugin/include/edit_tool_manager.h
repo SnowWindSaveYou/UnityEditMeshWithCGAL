@@ -37,19 +37,42 @@ public:
 	IEditTool* currentEditTool;
 	std::map<int, IEditTool*> editToolList;
 
-	void SetCurrentTool(int idx);
+	std::map<INTERACTION_KEYS, bool> keysMap;
 
+	int* m_selected_vertices;
+
+
+	void SetCurrentTool(int idx);
 
 	void ProcessToolBegin();
 	void ProcessToolEnd();
-
 	// TODO put into independent thread
 	void ProcessToolUpdate();
+
+	void SetKey(INTERACTION_KEYS key, bool state);
+
+	bool GetKey(INTERACTION_KEYS key);
+
+	void SetSelectionBuffer(int* selectedBuffer);
 
 
 private:
 	static EditToolManager* g_pInstance;
 };
+
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
+	__declspec(dllexport) void SetSelectionBuffer(int* selectedBuffer);
+
+
+#ifdef __cplusplus
+}
+#endif
+
 
 
 #endif // !EDIT_TOOL_MANAGER_H

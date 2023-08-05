@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.Collections;
 using UnityEngine;
 using Utility;
 
@@ -51,6 +53,8 @@ namespace CGALPlugin
         public EditToolType currentEditToolType = EditToolType.None;
         public Dictionary<EditToolType, IEditTool> editTools;
 
+        NativeArray<int> m_selectedList;
+
         float brushSize = 0.3f;
 
         private bool isEditProcessing = false;
@@ -85,6 +89,18 @@ namespace CGALPlugin
             }
         }
 
+
+        public void SetCurrentTarget(SurfaceMesh target)
+        {
+            currentTarget = target;
+            if(m_selectedList==null|| m_selectedList.Count()< target.m_work_vertices.Count())
+            {
+                if (m_selectedList != null) m_selectedList.Dispose();
+                m_selectedList = new NativeArray<int>(target.m_work_vertices.Count(), Allocator.Persistent);
+            }
+
+        }
+
         #region [Interaction help]
 
 
@@ -101,9 +117,6 @@ namespace CGALPlugin
             return pos;
         }
         #endregion [Interaction help]
-
-
-
 
         #region [Edit Actions]
 
@@ -146,6 +159,11 @@ namespace CGALPlugin
 
             //test
             SetEditToolType(EditToolType.Drag);
+
+            if (currentTarget != null)
+            {
+                SetCurrentTarget(currentTarget);
+            }
         }
         private void OnDestroy()
         {

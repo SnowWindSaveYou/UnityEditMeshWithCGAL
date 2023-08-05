@@ -12,6 +12,7 @@ EditToolManager* EditToolManager::g_pInstance = new (std::nothrow) EditToolManag
 
 EditToolManager::EditToolManager()
 {
+	this->keysMap = std::map<INTERACTION_KEYS, bool>();
 	this->editToolList = std::map<int, IEditTool*>();
 	this->editToolList.insert(std::make_pair(1, new GrabBrushTool()));
 	this->editToolList.insert(std::make_pair(2, new DeformBrushTool()));
@@ -43,3 +44,42 @@ void EditToolManager::ProcessToolEnd() {
 void EditToolManager::ProcessToolUpdate() {
 	currentEditTool->OnEditProcess();
 }
+
+
+
+void EditToolManager::SetKey(INTERACTION_KEYS key, bool state) {
+	if (keysMap.find(key) == keysMap.end()) {
+		keysMap.insert(std::make_pair(key, state));
+	}
+	else {
+		keysMap.at(key) = state;
+	}
+}
+
+bool EditToolManager::GetKey(INTERACTION_KEYS key) {
+	if (keysMap.find(key) == keysMap.end()) {
+		return false;
+	}
+	return	keysMap.at(key);
+
+}
+
+
+void EditToolManager::SetSelectionBuffer(int* selectedBuffer) {
+	this->m_selected_vertices = selectedBuffer;
+	this->SetKey(DISPLAY_SELECTION, true);
+}
+
+
+
+
+
+
+
+#pragma region export
+
+void SetSelectionBuffer(int* selectedBuffer) {
+	EditToolManager::getInstance()->SetSelectionBuffer(selectedBuffer);
+
+}
+#pragma endregion

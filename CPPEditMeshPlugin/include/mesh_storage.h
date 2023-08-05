@@ -30,6 +30,7 @@ public:
 	int m_vertexCount;
 	int m_indexCount;
 
+
 	bool notifiedMeshUpdated = false;
 
 	MeshStorage();
@@ -51,6 +52,9 @@ public:
 	void GetMeshCountsInfo(int& vertexCount, int& indexCount);
 
 	void UpdateTree();
+
+
+
 	
 };
 

@@ -20,8 +20,16 @@ DeformBrushTool::~DeformBrushTool()
 
 void DeformBrushTool::OnSelected() {
 	MeshStorage* ms = MeshStorageManager::getInstance()->current;
+	EditToolManager* etm = EditToolManager::getInstance();
 	//ms->m_deformation->reset();
 	m_deformation.reset(new SM_Deformation(*ms->m_mesh));
+
+	v_select_roi.clear();
+	v_select_control.clear();
+
+	if (etm->GetKey(DISPLAY_SELECTION)) {
+		memset(etm->m_selected_vertices, 0, sizeof(int) * ms->m_vertexCount);
+	}
 
 }
 void DeformBrushTool::OnRemoved() {
@@ -33,6 +41,8 @@ void DeformBrushTool::OnEditBegin() {
 	EditToolManager* etm = EditToolManager::getInstance();
 	Mesh& mesh = *ms->m_mesh;
 	Tree& tree = *ms->m_tree;
+
+	bool displaySelection = etm->GetKey(DISPLAY_SELECTION);
 
 
 	Point3 hitPoint;
@@ -82,6 +92,9 @@ void DeformBrushTool::OnEditBegin() {
 				if (squared_dist < squared_radius) {
 					v_stack.push(v);
 					v_select_roi.push_back(v);
+					if (displaySelection) {
+						etm->m_selected_vertices[ms->m_vmap.at(v)] = 1;
+					}
 				}
 			}
 		} while (vbegin != vend);
@@ -92,6 +105,14 @@ void DeformBrushTool::OnEditBegin() {
 	//ms->m_deformation->insert_control_vertices(v_select.begin(),v_select.end());
 	m_deformation->insert_roi_vertices(v_select_roi.begin(), v_select_roi.end());
 	m_deformation->preprocess();
+
+
+	// display state
+	//if (etm->GetKey(DISPLAY_SELECTION)) {
+	//	for (auto v : v_select_roi) {
+
+	//	}
+	//}
 
 }
 
