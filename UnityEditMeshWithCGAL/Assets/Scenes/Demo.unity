@@ -457,7 +457,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 5829b9279ca1f754ab18449bcfbda5fc, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -519,8 +519,11 @@ MonoBehaviour:
   m_orignal_vertices: []
   m_orignal_triangles: 
   m_work_vertices: []
-  m_work_triangles: 
+  m_work_indices: 
+  m_work_vertices_count: 0
+  m_work_indices_count: 0
   m_selected_vertices: 
+  m_material: {fileID: 0}
   testTrans: {fileID: 1721050415}
 --- !u!1 &1721050414
 GameObject:

@@ -54,6 +54,7 @@ namespace CGALPlugin
         public Dictionary<EditToolType, IEditTool> editTools;
 
         NativeArray<int> m_selectedList;
+        ComputeBuffer m_selectedVerticesBuffer;
 
         float brushSize = 0.3f;
 
@@ -92,13 +93,27 @@ namespace CGALPlugin
 
         public void SetCurrentTarget(SurfaceMesh target)
         {
+            if (currentTarget != null)
+            {
+                currentTarget.OnWithDraw();
+                currentTarget.m_material.DisableKeyword("HIGHLIGHT_VERTICES");
+            }
             currentTarget = target;
+            currentTarget.OnSelected();
+
+
             if(m_selectedList==null|| m_selectedList.Count()< target.m_work_vertices.Count())
             {
-                if (m_selectedList != null) m_selectedList.Dispose();
+                if (m_selectedList != null) {
+                    m_selectedVerticesBuffer.Release();
+                    m_selectedList.Dispose(); 
+                }
                 m_selectedList = new NativeArray<int>(target.m_work_vertices.Count(), Allocator.Persistent);
+
+                m_selectedVerticesBuffer = new ComputeBuffer(target.m_work_vertices.Count(), sizeof(int));
             }
 
+            m_selectedVerticesBuffer.SetData(m_selectedList,0,0,target.m_work_vertices.Count());
         }
 
         #region [Interaction help]
